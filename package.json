@@ -1,0 +1,21 @@
+{
+  "name": "d3-timeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/timeline-chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Commodity Vectors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commodityvectors/d3-timeline.git"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.5.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^1.6.0"
+  }
+}
