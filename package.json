@@ -4,7 +4,6 @@
   "description": "",
   "main": "dist/timeline-chart.js",
   "scripts": {
-    "test": "jest"
   },
   "author": "Commodity Vectors",
   "license": "MIT",
@@ -20,6 +19,5 @@
     "gulp-babel": "^6.1.2",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
-    "jest-cli": "^0.8.2"
   }
 }
