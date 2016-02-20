@@ -8,7 +8,9 @@ var TimelineChart = function () {
     function TimelineChart(element, data, opts) {
         _classCallCheck(this, TimelineChart);
 
-        element.classList.add('timline-chart');
+        var self = this;
+
+        element.classList.add('timeline-chart');
 
         var options = this.extendOptions(opts);
 
@@ -38,7 +40,7 @@ var TimelineChart = function () {
 
         var xAxis = d3.svg.axis().scale(x).orient('bottom').tickSize(-height);
 
-        var zoom = d3.behavior.zoom().x(x).scaleExtent([0.1, 20]).on('zoom', zoomed);
+        var zoom = d3.behavior.zoom().x(x).on('zoom', zoomed);
 
         var svg = d3.select(element).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')').call(zoom);
 
@@ -104,14 +106,20 @@ var TimelineChart = function () {
         }
 
         zoomed();
-
         function zoomed() {
+            if (self.onVizChange && d3.event) {
+                self.onVizChange.call(self, {
+                    scale: d3.event.scale,
+                    translate: d3.event.translate,
+                    domain: x.domain()
+                });
+            }
+
             svg.select('.x.axis').call(xAxis);
 
             svg.selectAll('circle.dot').attr('cx', function (d) {
                 return x(d.at);
             });
-
             svg.selectAll('rect.interval').attr('x', function (d) {
                 return x(d.from);
             }).attr('width', function (d) {
@@ -170,6 +178,12 @@ var TimelineChart = function () {
         key: 'getPointMaxDt',
         value: function getPointMaxDt(p) {
             return p.type === TimelineChart.TYPE.POINT ? p.at : p.to;
+        }
+    }, {
+        key: 'onVizChange',
+        value: function onVizChange(fn) {
+            this.onVizChange = fn;
+            return this;
         }
     }]);
 

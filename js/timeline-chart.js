@@ -1,6 +1,8 @@
 class TimelineChart {
     constructor(element, data, opts) {
-        element.classList.add('timline-chart');
+        let self = this;
+
+        element.classList.add('timeline-chart');
 
         let options = this.extendOptions(opts);
 
@@ -35,7 +37,6 @@ class TimelineChart {
 
         let zoom = d3.behavior.zoom()
             .x(x)
-            .scaleExtent([0.1, 20])
             .on('zoom', zoomed);
 
         let svg = d3.select(element).append('svg')
@@ -150,17 +151,19 @@ class TimelineChart {
         }
 
         zoomed();
-
         function zoomed() {
-            svg.select('.x.axis')
-                .call(xAxis);
+            if(self.onVizChange && d3.event) {
+                self.onVizChange.call(self, {
+                    scale: d3.event.scale,
+                    translate: d3.event.translate,
+                    domain: x.domain()
+                });
+            }
 
-            svg.selectAll('circle.dot')
-                .attr('cx', d => x(d.at));
+            svg.select('.x.axis').call(xAxis);
 
-            svg.selectAll('rect.interval')
-                .attr('x', d => x(d.from))
-                .attr('width', d => x(d.to) - x(d.from));
+            svg.selectAll('circle.dot').attr('cx', d => x(d.at));
+            svg.selectAll('rect.interval').attr('x', d => x(d.from)).attr('width', d => x(d.to) - x(d.from));
 
             svg.selectAll('.interval-text').attr('x', function(d) {
                     let positionData = getTextPositionData.call(this, d);
@@ -204,6 +207,10 @@ class TimelineChart {
     }
     getPointMaxDt(p) {
         return p.type === TimelineChart.TYPE.POINT ? p.at : p.to;
+    }
+    onVizChange(fn) {
+        this.onVizChange = fn;
+        return this;
     }
 }
 
