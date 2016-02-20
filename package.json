@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/timeline-chart.js",
   "scripts": {
+    "test": "karma start karma.conf.js --single-run"
   },
   "author": "Commodity Vectors",
   "license": "MIT",
@@ -19,5 +20,10 @@
     "gulp-babel": "^6.1.2",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.21",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.7",
+    "karma-mocha-reporter": "^1.2.0"
   }
 }
