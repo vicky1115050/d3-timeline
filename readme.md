@@ -3,6 +3,10 @@
 
 ![Chart example](https://raw.githubusercontent.com/commodityvectors/d3-timeline/master/usage.gif)
 
+## Installing
+
+`npm install d3-timeline-chart --save`
+
 ## Example
 
 ```javascript
