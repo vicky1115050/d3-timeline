@@ -145,9 +145,14 @@ class TimelineChart {
             .attr('r', 5);
 
         if (options.tip) {
-            let tip = d3.tip().attr('class', 'd3-tip').html(options.tip);
-            svg.call(tip);
-            dots.on('mouseover', tip.show).on('mouseout', tip.hide)
+            if(d3.tip) {
+                let tip = d3.tip().attr('class', 'd3-tip').html(options.tip);
+                svg.call(tip);
+                dots.on('mouseover', tip.show).on('mouseout', tip.hide)
+            }
+            else {
+                console.error('Please make sure you have d3.tip included as dependency (https://github.com/Caged/d3-tip)');
+            }
         }
 
         zoomed();
