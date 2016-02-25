@@ -111,8 +111,8 @@ var TimelineChart = function () {
 
         zoomed();
         function zoomed() {
-            if (self.onVizChange && d3.event) {
-                self.onVizChange.call(self, {
+            if (self.onVizChangeFn && d3.event) {
+                self.onVizChangeFn.call(self, {
                     scale: d3.event.scale,
                     translate: d3.event.translate,
                     domain: x.domain()
@@ -186,7 +186,7 @@ var TimelineChart = function () {
     }, {
         key: 'onVizChange',
         value: function onVizChange(fn) {
-            this.onVizChange = fn;
+            this.onVizChangeFn = fn;
             return this;
         }
     }]);

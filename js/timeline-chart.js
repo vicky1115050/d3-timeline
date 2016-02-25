@@ -157,8 +157,8 @@ class TimelineChart {
 
         zoomed();
         function zoomed() {
-            if(self.onVizChange && d3.event) {
-                self.onVizChange.call(self, {
+            if(self.onVizChangeFn && d3.event) {
+                self.onVizChangeFn.call(self, {
                     scale: d3.event.scale,
                     translate: d3.event.translate,
                     domain: x.domain()
@@ -214,7 +214,7 @@ class TimelineChart {
         return p.type === TimelineChart.TYPE.POINT ? p.at : p.to;
     }
     onVizChange(fn) {
-        this.onVizChange = fn;
+        this.onVizChangeFn = fn;
         return this;
     }
 }
