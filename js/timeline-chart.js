@@ -191,19 +191,38 @@ class TimelineChart {
                         return '-0.5em';
                     }
                     return '0.5em';
+                }).text(function(d) {
+                    var positionData = getTextPositionData.call(this, d);
+                    var percent = (positionData.width - options.textTruncateThreshold) / positionData.textWidth;
+                    if (percent < 1) {
+                        if (positionData.width > options.textTruncateThreshold) {
+                            return d.label.substr(0, Math.floor(d.label.length * percent)) + '...';
+                        } else {
+                            return '';
+                        }
+                    }
+
+                    return d.label;
                 });
 
             function getTextPositionData(d) {
+                this.textSizeInPx = this.textSizeInPx || this.getComputedTextLength();
+                var from = x(d.from);
+                var to = x(d.to);
                 return {
-                    xPosition: x(d.from),
-                    upToPosition: x(d.to),
-                    textWidth: this.getComputedTextLength()
+                    xPosition: from,
+                    upToPosition: to,
+                    width: to - from,
+                    textWidth: this.textSizeInPx
                 }
             }
         }
     }
     extendOptions(ext = {}) {
-        let defaultOptions = { tip: undefined };
+        let defaultOptions = {
+            tip: undefined,
+            textTruncateThreshold: 30
+        };
         Object.keys(ext).map(k => defaultOptions[k] = ext[k]);
         return defaultOptions;
     }
