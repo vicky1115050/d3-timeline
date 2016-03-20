@@ -86,7 +86,7 @@ class TimelineChart {
             .data(data)
             .enter()
             .append('text')
-            .attr('class', '.group-label')
+            .attr('class', 'group-label')
             .attr('x', 0)
             .attr('y', (d, i) => {
                 return (groupHeight * i) + (groupHeight / 2) + 5.5;
@@ -96,12 +96,12 @@ class TimelineChart {
 
         let lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
 
-        let groupIntervalItems = svg.selectAll('.item')
+        let groupIntervalItems = svg.selectAll('.group-interval-item')
             .data(data)
             .enter()
             .append('g')
             .attr('clip-path', 'url(#chart-content)')
-            .attr('class', '.item')
+            .attr('class', 'item')
             .attr('transform', (d, i) => `translate(0, ${groupHeight * i})`)
             .selectAll('.dot')
             .data(d => d.data.filter(_ => _.type === TimelineChart.TYPE.INTERVAL))
@@ -126,15 +126,17 @@ class TimelineChart {
             .attr('y', (groupHeight / 2) + 5)
             .attr('x', (d) => x(d.from));
 
-        let groupDotItems = svg.selectAll('.item')
+        let groupDotItems = svg.selectAll('.group-dot-item')
             .data(data)
             .enter()
             .append('g')
             .attr('clip-path', 'url(#chart-content)')
-            .attr('class', '.item')
+            .attr('class', 'item')
             .attr('transform', (d, i) => `translate(0, ${groupHeight * i})`)
             .selectAll('.dot')
-            .data(d => d.data.filter(_ => _.type === TimelineChart.TYPE.POINT))
+            .data(d => {
+                return d.data.filter(_ => _.type === TimelineChart.TYPE.POINT);
+            })
             .enter();
 
         let dots = groupDotItems
@@ -145,19 +147,19 @@ class TimelineChart {
             .attr('r', 5);
 
         if (options.tip) {
-            if(d3.tip) {
+            if (d3.tip) {
                 let tip = d3.tip().attr('class', 'd3-tip').html(options.tip);
                 svg.call(tip);
                 dots.on('mouseover', tip.show).on('mouseout', tip.hide)
-            }
-            else {
+            } else {
                 console.error('Please make sure you have d3.tip included as dependency (https://github.com/Caged/d3-tip)');
             }
         }
 
         zoomed();
+
         function zoomed() {
-            if(self.onVizChangeFn && d3.event) {
+            if (self.onVizChangeFn && d3.event) {
                 self.onVizChangeFn.call(self, {
                     scale: d3.event.scale,
                     translate: d3.event.translate,
