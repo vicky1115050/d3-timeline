@@ -57,7 +57,7 @@ var TimelineChart = function () {
             return groupHeight * (i + 1);
         });
 
-        var groupLabels = svg.selectAll('.group-label').data(data).enter().append('text').attr('class', '.group-label').attr('x', 0).attr('y', function (d, i) {
+        var groupLabels = svg.selectAll('.group-label').data(data).enter().append('text').attr('class', 'group-label').attr('x', 0).attr('y', function (d, i) {
             return groupHeight * i + groupHeight / 2 + 5.5;
         }).attr('dx', '0.5em').text(function (d) {
             return d.label;
@@ -65,7 +65,7 @@ var TimelineChart = function () {
 
         var lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
 
-        var groupIntervalItems = svg.selectAll('.item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', '.item').attr('transform', function (d, i) {
+        var groupIntervalItems = svg.selectAll('.group-interval-item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', 'item').attr('transform', function (d, i) {
             return 'translate(0, ' + groupHeight * i + ')';
         }).selectAll('.dot').data(function (d) {
             return d.data.filter(function (_) {
@@ -87,7 +87,7 @@ var TimelineChart = function () {
             return x(d.from);
         });
 
-        var groupDotItems = svg.selectAll('.item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', '.item').attr('transform', function (d, i) {
+        var groupDotItems = svg.selectAll('.group-dot-item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', 'item').attr('transform', function (d, i) {
             return 'translate(0, ' + groupHeight * i + ')';
         }).selectAll('.dot').data(function (d) {
             return d.data.filter(function (_) {
@@ -110,6 +110,7 @@ var TimelineChart = function () {
         }
 
         zoomed();
+
         function zoomed() {
             if (self.onVizChangeFn && d3.event) {
                 self.onVizChangeFn.call(self, {
@@ -150,13 +151,29 @@ var TimelineChart = function () {
                     return '-0.5em';
                 }
                 return '0.5em';
+            }).text(function (d) {
+                var positionData = getTextPositionData.call(this, d);
+                var percent = (positionData.width - options.textTruncateThreshold) / positionData.textWidth;
+                if (percent < 1) {
+                    if (positionData.width > options.textTruncateThreshold) {
+                        return d.label.substr(0, Math.floor(d.label.length * percent)) + '...';
+                    } else {
+                        return '';
+                    }
+                }
+
+                return d.label;
             });
 
             function getTextPositionData(d) {
+                this.textSizeInPx = this.textSizeInPx || this.getComputedTextLength();
+                var from = x(d.from);
+                var to = x(d.to);
                 return {
-                    xPosition: x(d.from),
-                    upToPosition: x(d.to),
-                    textWidth: this.getComputedTextLength()
+                    xPosition: from,
+                    upToPosition: to,
+                    width: to - from,
+                    textWidth: this.textSizeInPx
                 };
             }
         }
@@ -167,7 +184,10 @@ var TimelineChart = function () {
         value: function extendOptions() {
             var ext = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var defaultOptions = { tip: undefined };
+            var defaultOptions = {
+                tip: undefined,
+                textTruncateThreshold: 30
+            };
             Object.keys(ext).map(function (k) {
                 return defaultOptions[k] = ext[k];
             });
