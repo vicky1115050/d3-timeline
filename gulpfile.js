@@ -6,6 +6,7 @@
     const sourcemaps = require('gulp-sourcemaps');
     const webserver = require('gulp-webserver');
     const sass = require('gulp-sass');
+    var autoprefixer = require('gulp-autoprefixer');
 
     gulp.task('js:build', () => {
         return gulp.src('js/timeline-chart.js')
@@ -22,6 +23,7 @@
     gulp.task('css:build', function () {
       return gulp.src('./scss/**/*.scss')
         .pipe(sass().on('error', sass.logError))
+        .pipe(autoprefixer())
         .pipe(gulp.dest('./dist'));
     });
 
