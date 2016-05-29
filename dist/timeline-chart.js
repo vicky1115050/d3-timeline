@@ -75,7 +75,7 @@ var TimelineChart = function () {
 
         var intervalBarHeight = 0.8 * groupHeight;
         var intervalBarMargin = (groupHeight - intervalBarHeight) / 2;
-        var intervals = groupIntervalItems.append('rect').attr('class', 'interval').attr('width', function (d) {
+        var intervals = groupIntervalItems.append('rect').attr('class', withCustom('interval')).attr('width', function (d) {
             return x(d.to) - x(d.from);
         }).attr('height', intervalBarHeight).attr('y', intervalBarMargin).attr('x', function (d) {
             return x(d.from);
@@ -83,7 +83,7 @@ var TimelineChart = function () {
 
         var intervalTexts = groupIntervalItems.append('text').text(function (d) {
             return d.label;
-        }).attr('fill', 'white').attr('class', 'interval-text').attr('y', groupHeight / 2 + 5).attr('x', function (d) {
+        }).attr('fill', 'white').attr('class', withCustom('interval-text')).attr('y', groupHeight / 2 + 5).attr('x', function (d) {
             return x(d.from);
         });
 
@@ -95,7 +95,7 @@ var TimelineChart = function () {
             });
         }).enter();
 
-        var dots = groupDotItems.append('circle').attr('class', 'dot').attr('cx', function (d) {
+        var dots = groupDotItems.append('circle').attr('class', withCustom('dot')).attr('cx', function (d) {
             return x(d.at);
         }).attr('cy', groupHeight / 2).attr('r', 5);
 
@@ -110,6 +110,12 @@ var TimelineChart = function () {
         }
 
         zoomed();
+
+        function withCustom(defaultClass) {
+            return function (d) {
+                return d.customClass ? [d.customClass, defaultClass].join(' ') : defaultClass;
+            };
+        }
 
         function zoomed() {
             if (self.onVizChangeFn && d3.event) {
