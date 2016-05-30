@@ -109,7 +109,7 @@
             var intervalBarHeight = 0.8 * groupHeight;
             var intervalBarMargin = (groupHeight - intervalBarHeight) / 2;
             var intervals = groupIntervalItems.append('rect').attr('class', withCustom('interval')).attr('width', function (d) {
-                return x(d.to) - x(d.from);
+                return Math.max(options.intervalMinWidth, x(d.to) - x(d.from));
             }).attr('height', intervalBarHeight).attr('y', intervalBarMargin).attr('x', function (d) {
                 return x(d.from);
             });
@@ -167,7 +167,7 @@
                 svg.selectAll('rect.interval').attr('x', function (d) {
                     return x(d.from);
                 }).attr('width', function (d) {
-                    return x(d.to) - x(d.from);
+                    return Math.max(options.intervalMinWidth, x(d.to) - x(d.from));
                 });
 
                 svg.selectAll('.interval-text').attr('x', function (d) {
@@ -224,6 +224,7 @@
                 var ext = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
                 var defaultOptions = {
+                    intervalMinWidth: 8, // px
                     tip: undefined,
                     textTruncateThreshold: 30
                 };
