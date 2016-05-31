@@ -1,6 +1,6 @@
 {
   "name": "d3-timeline-chart",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/timeline-chart.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "d3": "^3.5.16",
     "d3-tip": "^0.6.7",
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.2",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",

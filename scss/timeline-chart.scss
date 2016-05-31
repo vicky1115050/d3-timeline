@@ -9,6 +9,20 @@
     rect, rect.chart-bounds {
         fill: transparent;
     }
+    rect.chart-bounds, rect.interval {
+        &:hover {
+            cursor: grab;
+        }
+        &:active {
+            cursor: grabbing;
+        }
+    }
+    .dot:hover {
+        cursor: pointer;
+    }
+    .interval-text {
+        pointer-events: none;
+    }
     rect.interval {
         ry: 5;
         rx: 5;

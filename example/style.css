@@ -26,6 +26,15 @@ body > section {
     stroke: #2b2b2b;
 }
 
+rect.interval.blue-interval {
+    fill: blue;
+    stroke: blue;
+}
+
+circle.blue-dot {
+    fill: blue;
+}
+
 /* Override d3tip */
 
 .d3-tip {

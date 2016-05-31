@@ -107,12 +107,11 @@ class TimelineChart {
             .data(d => d.data.filter(_ => _.type === TimelineChart.TYPE.INTERVAL))
             .enter();
 
-
         let intervalBarHeight = 0.8 * groupHeight;
         let intervalBarMargin = (groupHeight - intervalBarHeight) / 2;
         let intervals = groupIntervalItems
             .append('rect')
-            .attr('class', 'interval')
+            .attr('class', withCustom('interval'))
             .attr('width', (d) => x(d.to) - x(d.from))
             .attr('height', intervalBarHeight)
             .attr('y', intervalBarMargin)
@@ -122,7 +121,7 @@ class TimelineChart {
             .append('text')
             .text(d => d.label)
             .attr('fill', 'white')
-            .attr('class', 'interval-text')
+            .attr('class', withCustom('interval-text'))
             .attr('y', (groupHeight / 2) + 5)
             .attr('x', (d) => x(d.from));
 
@@ -141,7 +140,7 @@ class TimelineChart {
 
         let dots = groupDotItems
             .append('circle')
-            .attr('class', 'dot')
+            .attr('class', withCustom('dot'))
             .attr('cx', d => x(d.at))
             .attr('cy', groupHeight / 2)
             .attr('r', 5);
@@ -157,6 +156,10 @@ class TimelineChart {
         }
 
         zoomed();
+
+        function withCustom(defaultClass) {
+            return d => d.customClass ? [d.customClass, defaultClass].join(' ') : defaultClass
+        }
 
         function zoomed() {
             if (self.onVizChangeFn && d3.event) {
