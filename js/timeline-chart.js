@@ -247,3 +247,5 @@ TimelineChart.TYPE = {
     POINT: Symbol(),
     INTERVAL: Symbol()
 };
+
+module.exports = TimelineChart;
