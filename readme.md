@@ -33,7 +33,8 @@ const data = [{
         at: new Date([2015, 6, 1])
     }, {
         type: TimelineChart.TYPE.POINT,
-        at: new Date([2015, 7, 1])
+        at: new Date([2015, 7, 1]),
+        customClass: 'custom-class'
     }]
 }];
 
