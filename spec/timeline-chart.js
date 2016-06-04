@@ -53,6 +53,33 @@ describe('TimelineChart', () => {
         });
     });
 
+
+    describe('min interval width', () => {
+        function matchWidth(w, cfg) {
+            return function() {
+                const div = getDefaultSizeContainer();
+                const data = [{
+                    label: 'Group 1',
+                    data: [{
+                        from: new Date([2015, 1, 1]),
+                        to: new Date([2015, 1, 1]),
+                        type: TimelineChart.TYPE.INTERVAL,
+                        customClass: 'custom-class-interval',
+                        label: 'Test'
+                    }]
+                }];
+
+                const chart = new TimelineChart(div, data, cfg);
+                const currentWidth = div.querySelector('rect.custom-class-interval').getAttribute('width');
+                expect(currentWidth == w).toBeTruthy();
+            }
+        }
+
+        it('should default equals to 8', matchWidth(8, {}));
+
+        it('should be able to change default min width', matchWidth(5, {intervalMinWidth: 5}));
+    });
+
     function getDefaultSizeContainer() {
         const div = document.createElement('div');
         div.setAttribute('class', WRAPPER_CLASS);
