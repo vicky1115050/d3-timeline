@@ -112,7 +112,7 @@ class TimelineChart {
         let intervals = groupIntervalItems
             .append('rect')
             .attr('class', withCustom('interval'))
-            .attr('width', (d) => x(d.to) - x(d.from))
+            .attr('width', (d) => Math.max(options.intervalMinWidth, x(d.to) - x(d.from)))
             .attr('height', intervalBarHeight)
             .attr('y', intervalBarMargin)
             .attr('x', (d) => x(d.from));
@@ -173,7 +173,7 @@ class TimelineChart {
             svg.select('.x.axis').call(xAxis);
 
             svg.selectAll('circle.dot').attr('cx', d => x(d.at));
-            svg.selectAll('rect.interval').attr('x', d => x(d.from)).attr('width', d => x(d.to) - x(d.from));
+            svg.selectAll('rect.interval').attr('x', d => x(d.from)).attr('width', d => Math.max(options.intervalMinWidth, x(d.to) - x(d.from)));
 
             svg.selectAll('.interval-text').attr('x', function(d) {
                     let positionData = getTextPositionData.call(this, d);
@@ -225,6 +225,7 @@ class TimelineChart {
     }
     extendOptions(ext = {}) {
         let defaultOptions = {
+            intervalMinWidth: 8, // px
             tip: undefined,
             textTruncateThreshold: 30
         };
