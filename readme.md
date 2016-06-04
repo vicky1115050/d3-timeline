@@ -44,6 +44,15 @@ const timeline = new TimelineChart(element, data, {
 });
 ```
 
+## Config
+
+Available config parameters
+
+### intervalMinWidth (8)
+This allows you to define a minimum width for an interval element. Sometimes, when you zoom out too much you might still want to be able to visualize the interval. It defaults to 8.
+
+### tip (undefined)
+A function that receives as parameter a data point and returns an HTML text to be displayed as a tooltip
 
 ## License
 
