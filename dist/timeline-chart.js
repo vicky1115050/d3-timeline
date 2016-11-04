@@ -83,6 +83,8 @@
 
             svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
 
+            svg.append('line').attr('clip-path', 'url(#chart-content)').attr('id', 'now').attr("y1", 0).attr("y2", height).style("stroke-width", 1);
+
             var groupHeight = height / data.length;
             var groupSection = svg.selectAll('.group-section').data(data).enter().append('line').attr('class', 'group-section').attr('x1', 0).attr('x2', width).attr('y1', function (d, i) {
                 return groupHeight * (i + 1);
@@ -143,6 +145,7 @@
             }
 
             zoomed();
+            setInterval(tick, options.tickInterval);
 
             function withCustom(defaultClass) {
                 return function (d) {
@@ -158,6 +161,8 @@
                         domain: x.domain()
                     });
                 }
+
+                tick();
 
                 svg.select('.x.axis').call(xAxis);
 
@@ -216,6 +221,12 @@
                     };
                 }
             }
+
+            function tick() {
+                var nowX = x(new Date());
+
+                svg.select('#now').attr('x1', nowX).attr('x2', nowX);
+            }
         }
 
         _createClass(TimelineChart, [{
@@ -226,7 +237,8 @@
                 var defaultOptions = {
                     intervalMinWidth: 8, // px
                     tip: undefined,
-                    textTruncateThreshold: 30
+                    textTruncateThreshold: 30,
+                    tickInterval: 10000
                 };
                 Object.keys(ext).map(function (k) {
                     return defaultOptions[k] = ext[k];

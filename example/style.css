@@ -26,6 +26,11 @@ body > section {
     stroke: #2b2b2b;
 }
 
+#chart #now {
+    stroke: #c00;
+    fill: none;
+}
+
 rect.interval.blue-interval {
     fill: blue;
     stroke: blue;
