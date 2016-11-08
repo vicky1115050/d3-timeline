@@ -83,7 +83,9 @@
 
             svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
 
-            svg.append('line').attr('clip-path', 'url(#chart-content)').attr('id', 'now').attr("y1", 0).attr("y2", height).style("stroke-width", 1);
+            if (options.enableLiveTimer) {
+                svg.append('line').attr('clip-path', 'url(#chart-content)').attr('class', 'vertical-marker now').attr("y1", 0).attr("y2", height);
+            }
 
             var groupHeight = height / data.length;
             var groupSection = svg.selectAll('.group-section').data(data).enter().append('line').attr('class', 'group-section').attr('x1', 0).attr('x2', width).attr('y1', function (d, i) {
@@ -145,7 +147,16 @@
             }
 
             zoomed();
-            setInterval(tick, options.tickInterval);
+
+            if (options.enableLiveTimer) {
+                setInterval(tick, options.timerTickInterval);
+            }
+
+            function tick() {
+                var nowX = x(new Date());
+
+                svg.select('.now').attr('x1', nowX).attr('x2', nowX);
+            }
 
             function withCustom(defaultClass) {
                 return function (d) {
@@ -162,7 +173,9 @@
                     });
                 }
 
-                tick();
+                if (options.enableLiveTimer) {
+                    tick();
+                }
 
                 svg.select('.x.axis').call(xAxis);
 
@@ -221,12 +234,6 @@
                     };
                 }
             }
-
-            function tick() {
-                var nowX = x(new Date());
-
-                svg.select('#now').attr('x1', nowX).attr('x2', nowX);
-            }
         }
 
         _createClass(TimelineChart, [{
@@ -238,7 +245,8 @@
                     intervalMinWidth: 8, // px
                     tip: undefined,
                     textTruncateThreshold: 30,
-                    tickInterval: 10000
+                    enableLiveTimer: false,
+                    timerTickInterval: 1000
                 };
                 Object.keys(ext).map(function (k) {
                     return defaultOptions[k] = ext[k];

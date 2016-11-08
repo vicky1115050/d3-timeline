@@ -5,6 +5,9 @@
 .timeline-chart line {
   stroke: black; }
 
+.timeline-chart .vertical-marker {
+  stroke-width: 1; }
+
 .timeline-chart rect, .timeline-chart rect.chart-bounds {
   fill: transparent; }
 
