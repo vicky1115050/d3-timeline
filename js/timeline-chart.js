@@ -68,7 +68,7 @@ class TimelineChart {
             .call(xAxis);
 
         if (options.enableLiveTimer) {
-            svg.append('line')
+            self.now = svg.append('line')
                 .attr('clip-path', 'url(#chart-content)')
                 .attr('class', 'vertical-marker now')
                 .attr("y1", 0)
@@ -170,11 +170,9 @@ class TimelineChart {
         }
 
         function tick() {
-            const nowX = x(new Date());
+            let nowX = x(new Date());
 
-            svg.select('.now')
-                .attr('x1', nowX)
-                .attr('x2', nowX);
+            self.now.attr('x1', nowX).attr('x2', nowX);
         }
 
         function withCustom(defaultClass) {

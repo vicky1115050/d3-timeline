@@ -84,7 +84,7 @@
             svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
 
             if (options.enableLiveTimer) {
-                svg.append('line').attr('clip-path', 'url(#chart-content)').attr('class', 'vertical-marker now').attr("y1", 0).attr("y2", height);
+                self.now = svg.append('line').attr('clip-path', 'url(#chart-content)').attr('class', 'vertical-marker now').attr("y1", 0).attr("y2", height);
             }
 
             var groupHeight = height / data.length;
@@ -155,7 +155,7 @@
             function tick() {
                 var nowX = x(new Date());
 
-                svg.select('.now').attr('x1', nowX).attr('x2', nowX);
+                self.now.attr('x1', nowX).attr('x2', nowX);
             }
 
             function withCustom(defaultClass) {
