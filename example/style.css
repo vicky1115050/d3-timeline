@@ -26,6 +26,10 @@ body > section {
     stroke: #2b2b2b;
 }
 
+#chart line.vertical-marker.now {
+    stroke: #c00;
+}
+
 rect.interval.blue-interval {
     fill: blue;
     stroke: blue;

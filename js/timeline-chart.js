@@ -67,6 +67,14 @@ class TimelineChart {
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
 
+        if (options.enableLiveTimer) {
+            self.now = svg.append('line')
+                .attr('clip-path', 'url(#chart-content)')
+                .attr('class', 'vertical-marker now')
+                .attr("y1", 0)
+                .attr("y2", height);
+        }
+
         let groupHeight = height / data.length;
         let groupSection = svg.selectAll('.group-section')
             .data(data)
@@ -157,6 +165,16 @@ class TimelineChart {
 
         zoomed();
 
+        if (options.enableLiveTimer) {
+            setInterval(updateNowMarker, options.timerTickInterval);
+        }
+
+        function updateNowMarker() {
+            let nowX = x(new Date());
+
+            self.now.attr('x1', nowX).attr('x2', nowX);
+        }
+
         function withCustom(defaultClass) {
             return d => d.customClass ? [d.customClass, defaultClass].join(' ') : defaultClass
         }
@@ -168,6 +186,10 @@ class TimelineChart {
                     translate: d3.event.translate,
                     domain: x.domain()
                 });
+            }
+
+            if (options.enableLiveTimer) {
+                updateNowMarker();
             }
 
             svg.select('.x.axis').call(xAxis);
@@ -227,7 +249,9 @@ class TimelineChart {
         let defaultOptions = {
             intervalMinWidth: 8, // px
             tip: undefined,
-            textTruncateThreshold: 30
+            textTruncateThreshold: 30,
+            enableLiveTimer: false,
+            timerTickInterval: 1000
         };
         Object.keys(ext).map(k => defaultOptions[k] = ext[k]);
         return defaultOptions;

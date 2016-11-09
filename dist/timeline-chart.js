@@ -83,6 +83,10 @@
 
             svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
 
+            if (options.enableLiveTimer) {
+                self.now = svg.append('line').attr('clip-path', 'url(#chart-content)').attr('class', 'vertical-marker now').attr("y1", 0).attr("y2", height);
+            }
+
             var groupHeight = height / data.length;
             var groupSection = svg.selectAll('.group-section').data(data).enter().append('line').attr('class', 'group-section').attr('x1', 0).attr('x2', width).attr('y1', function (d, i) {
                 return groupHeight * (i + 1);
@@ -144,6 +148,16 @@
 
             zoomed();
 
+            if (options.enableLiveTimer) {
+                setInterval(updateNowMarker, options.timerTickInterval);
+            }
+
+            function updateNowMarker() {
+                var nowX = x(new Date());
+
+                self.now.attr('x1', nowX).attr('x2', nowX);
+            }
+
             function withCustom(defaultClass) {
                 return function (d) {
                     return d.customClass ? [d.customClass, defaultClass].join(' ') : defaultClass;
@@ -157,6 +171,10 @@
                         translate: d3.event.translate,
                         domain: x.domain()
                     });
+                }
+
+                if (options.enableLiveTimer) {
+                    updateNowMarker();
                 }
 
                 svg.select('.x.axis').call(xAxis);
@@ -226,7 +244,9 @@
                 var defaultOptions = {
                     intervalMinWidth: 8, // px
                     tip: undefined,
-                    textTruncateThreshold: 30
+                    textTruncateThreshold: 30,
+                    enableLiveTimer: false,
+                    timerTickInterval: 1000
                 };
                 Object.keys(ext).map(function (k) {
                     return defaultOptions[k] = ext[k];
