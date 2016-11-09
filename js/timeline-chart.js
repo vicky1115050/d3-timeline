@@ -166,10 +166,10 @@ class TimelineChart {
         zoomed();
 
         if (options.enableLiveTimer) {
-            setInterval(tick, options.timerTickInterval);
+            setInterval(updateNowMarker, options.timerTickInterval);
         }
 
-        function tick() {
+        function updateNowMarker() {
             let nowX = x(new Date());
 
             self.now.attr('x1', nowX).attr('x2', nowX);
@@ -189,7 +189,7 @@ class TimelineChart {
             }
 
             if (options.enableLiveTimer) {
-                tick();
+                updateNowMarker();
             }
 
             svg.select('.x.axis').call(xAxis);

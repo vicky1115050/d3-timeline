@@ -149,10 +149,10 @@
             zoomed();
 
             if (options.enableLiveTimer) {
-                setInterval(tick, options.timerTickInterval);
+                setInterval(updateNowMarker, options.timerTickInterval);
             }
 
-            function tick() {
+            function updateNowMarker() {
                 var nowX = x(new Date());
 
                 self.now.attr('x1', nowX).attr('x2', nowX);
@@ -174,7 +174,7 @@
                 }
 
                 if (options.enableLiveTimer) {
-                    tick();
+                    updateNowMarker();
                 }
 
                 svg.select('.x.axis').call(xAxis);
