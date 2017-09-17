@@ -67,7 +67,7 @@
             var width = elementWidth - margin.left - margin.right;
             var height = elementHeight - margin.top - margin.bottom;
 
-            var groupWidth = 200;
+            var groupWidth = options.hideGroupLabels ? 0 : 200;
 
             var x = d3.time.scale().domain([minDt, maxDt]).range([groupWidth, width]);
 
@@ -94,13 +94,15 @@
                 return groupHeight * (i + 1);
             });
 
-            var groupLabels = svg.selectAll('.group-label').data(data).enter().append('text').attr('class', 'group-label').attr('x', 0).attr('y', function (d, i) {
-                return groupHeight * i + groupHeight / 2 + 5.5;
-            }).attr('dx', '0.5em').text(function (d) {
-                return d.label;
-            });
+            if (!options.hideGroupLabels) {
+                var groupLabels = svg.selectAll('.group-label').data(data).enter().append('text').attr('class', 'group-label').attr('x', 0).attr('y', function (d, i) {
+                    return groupHeight * i + groupHeight / 2 + 5.5;
+                }).attr('dx', '0.5em').text(function (d) {
+                    return d.label;
+                });
 
-            var lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
+                var lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
+            }
 
             var groupIntervalItems = svg.selectAll('.group-interval-item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', 'item').attr('transform', function (d, i) {
                 return 'translate(0, ' + groupHeight * i + ')';
@@ -239,14 +241,15 @@
         _createClass(TimelineChart, [{
             key: 'extendOptions',
             value: function extendOptions() {
-                var ext = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+                var ext = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
                 var defaultOptions = {
                     intervalMinWidth: 8, // px
                     tip: undefined,
                     textTruncateThreshold: 30,
                     enableLiveTimer: false,
-                    timerTickInterval: 1000
+                    timerTickInterval: 1000,
+                    hideGroupLabels: false
                 };
                 Object.keys(ext).map(function (k) {
                     return defaultOptions[k] = ext[k];

@@ -24,7 +24,7 @@ class TimelineChart {
         let width = elementWidth - margin.left - margin.right;
         let height = elementHeight - margin.top - margin.bottom;
 
-        let groupWidth = 200;
+        let groupWidth = (options.hideGroupLabels)? 0: 200;
 
         let x = d3.time.scale()
             .domain([minDt, maxDt])
@@ -90,19 +90,21 @@ class TimelineChart {
                 return groupHeight * (i + 1);
             });
 
-        let groupLabels = svg.selectAll('.group-label')
-            .data(data)
-            .enter()
-            .append('text')
-            .attr('class', 'group-label')
-            .attr('x', 0)
-            .attr('y', (d, i) => {
-                return (groupHeight * i) + (groupHeight / 2) + 5.5;
-            })
-            .attr('dx', '0.5em')
-            .text(d => d.label);
+        if (!options.hideGroupLabels) {
+            let groupLabels = svg.selectAll('.group-label')
+                .data(data)
+                .enter()
+                .append('text')
+                .attr('class', 'group-label')
+                .attr('x', 0)
+                .attr('y', (d, i) => {
+                    return (groupHeight * i) + (groupHeight / 2) + 5.5;
+                })
+                .attr('dx', '0.5em')
+                .text(d => d.label);
 
-        let lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
+            let lineSection = svg.append('line').attr('x1', groupWidth).attr('x2', groupWidth).attr('y1', 0).attr('y2', height).attr('stroke', 'black');
+        }
 
         let groupIntervalItems = svg.selectAll('.group-interval-item')
             .data(data)
@@ -251,7 +253,8 @@ class TimelineChart {
             tip: undefined,
             textTruncateThreshold: 30,
             enableLiveTimer: false,
-            timerTickInterval: 1000
+            timerTickInterval: 1000,
+            hideGroupLabels: false
         };
         Object.keys(ext).map(k => defaultOptions[k] = ext[k]);
         return defaultOptions;

@@ -80,6 +80,28 @@ describe('TimelineChart', () => {
         it('should be able to change default min width', matchWidth(5, {intervalMinWidth: 5}));
     });
 
+    describe('hiding group labels', () => {
+        const div = getDefaultSizeContainer();
+        const data = [{
+            label: 'Group 1',
+            data: [{
+                from: new Date([2015, 1, 1]),
+                to: new Date([2015, 1, 1]),
+                type: TimelineChart.TYPE.INTERVAL,
+                customClass: 'custom-class-interval',
+                label: 'Test'
+            }]
+        }];
+        it('should hide group labels when options.hideGroupLabels is true', () => {
+            const chart = new TimelineChart(div, data, {hideGroupLabels: true});
+            expect(div.querySelectorAll('text.group-label').length).toBe(0);
+        });
+        it('should show group labels by default', () => {
+            const chart = new TimelineChart(div, data, {});
+            expect(div.querySelectorAll('text.group-label').length).toBe(1);
+        })
+    });
+
     function getDefaultSizeContainer() {
         const div = document.createElement('div');
         div.setAttribute('class', WRAPPER_CLASS);
