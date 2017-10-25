@@ -138,11 +138,30 @@
                 return x(d.at);
             }).attr('cy', groupHeight / 2).attr('r', 5);
 
+            //Adding support for Icons
+            var groupIconItems = svg.selectAll('.group-dot-item').data(data).enter().append('g').attr('clip-path', 'url(#chart-content)').attr('class', 'item').attr('transform', function (d, i) {
+                return 'translate(0, ' + groupHeight * i + ')';
+            }).selectAll('.dot-img').data(function (d) {
+                return d.data.filter(function (_) {
+                    return _.type === TimelineChart.TYPE.ICON;
+                });
+            }).enter();
+
+            var icons = groupIconItems.append("svg:image").attr('class', withCustom('dot-img')).attr('x', function (d) {
+                return x(d.at);
+            }).attr('y', 10)
+                .attr("xlink:href", function (d) {
+                    return d.src;
+                })
+                .attr("width", "20")
+                .attr("height", "20");
+
             if (options.tip) {
                 if (d3.tip) {
                     var tip = d3.tip().attr('class', 'd3-tip').html(options.tip);
                     svg.call(tip);
                     dots.on('mouseover', tip.show).on('mouseout', tip.hide);
+                    icons.on('mouseover', tip.show).on('mouseout', tip.hide);
                 } else {
                     console.error('Please make sure you have d3.tip included as dependency (https://github.com/Caged/d3-tip)');
                 }
@@ -182,6 +201,9 @@
                 svg.select('.x.axis').call(xAxis);
 
                 svg.selectAll('circle.dot').attr('cx', function (d) {
+                    return x(d.at);
+                });
+                svg.selectAll('image.dot-img').attr('x', function (d) {
                     return x(d.at);
                 });
                 svg.selectAll('rect.interval').attr('x', function (d) {
@@ -279,7 +301,8 @@
 
     TimelineChart.TYPE = {
         POINT: Symbol(),
-        INTERVAL: Symbol()
+        INTERVAL: Symbol(),
+        ICON: Symbol()
     };
 
     module.exports = TimelineChart;

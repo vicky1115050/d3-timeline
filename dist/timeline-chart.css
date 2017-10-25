@@ -20,6 +20,10 @@
   cursor: grabbing; }
 
 .timeline-chart .dot:hover {
+
+  cursor: pointer; }
+
+.timeline-chart .dot-img:hover {
   cursor: pointer; }
 
 .timeline-chart .interval-text {
