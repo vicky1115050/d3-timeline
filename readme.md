@@ -24,8 +24,7 @@ const data = [{
         type: TimelineChart.TYPE.POINT,
         at: new Date([2015, 1, 15])
     }, {
-        type: TimelineChart.TYPE.ICON,
-        src: 'Path to Image',
+        type: TimelineChart.TYPE.POINT,
         at: new Date([2015, 3, 10])
     }, {
         label: 'I\'m a label',
